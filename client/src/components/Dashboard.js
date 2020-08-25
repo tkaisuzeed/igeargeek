@@ -18,7 +18,7 @@ const Dashboard = () => {
     );
   } else {
     if (hasAccount) {
-        return (
+      return (
         <div className="dashboard">
           <SignInBoard />
         </div>
@@ -204,10 +204,22 @@ const SignUpBoard = () => {
 const MemberBoard = () => {
   // Variable
   const { setAuth, setUser, user, setClient, client } = useContext(GlobalState);
+
   const [balance, setBalance] = useState(1);
+
+  const [amount, setAmount] = useState(0);                                                                                                                                                                  
+  const [amountType, setAmountType] = useState({
+    '1000':0,'500':0,'100':0,'50':0,'20':0,'10':0,'5':0,'2':0,'1':0
+  });
+  const [fillAmount, setFillAmount] = useState('')
+
   const [agreePurchase, setAgreePurchase] = useState(false);
+
   const [edate, setEdate] = useState("");
+
   const [cost, setCost] = useState(0);
+  const [duration, setDuration] = useState(0);
+
   // Function
   // function sign out : remove cookie and clear state
   const handleSignOut = () => {
@@ -220,23 +232,73 @@ const MemberBoard = () => {
     window.location.reload(false);
   };
 
-  // call deposit API to add money
+  // inser money
   const handleDeposit = (e) => {
-    let amount = parseFloat(client.balance) + parseFloat(balance);
-    const newBalance = { _id: user, balance: +amount };
-    Deposit(newBalance);
-    window.location.reload(false);
+    e.preventDefault();
+    setAmount(parseFloat(amount)+parseFloat(balance));
+    if(parseInt(balance)===1000){
+      setAmountType({...amountType,"1000":parseInt(amountType[1000]+1)});
+    }else if(parseInt(balance)===500){
+      setAmountType({...amountType,"500":parseInt(amountType[500]+1)});
+    }else if(parseInt(balance)===100){
+      setAmountType({...amountType,"100":parseInt(amountType[100]+1)});
+    }else if(parseInt(balance)===50){
+      setAmountType({...amountType,"50":parseInt(amountType[50]+1)});
+    }else if(parseInt(balance)===20){
+      setAmountType({...amountType,"20":parseInt(amountType[20]+1)});
+    }else if(parseInt(balance)===10){
+      setAmountType({...amountType,"10":parseInt(amountType[10]+1)});
+    }else if(parseInt(balance)===5){
+      setAmountType({...amountType,"5":parseInt(amountType[5]+1)});
+    }else if(parseInt(balance)===2){
+      setAmountType({...amountType,"2":parseInt(amountType[2]+1)});
+    }else if(parseInt(balance)===1){
+      setAmountType({...amountType,"1":parseInt(amountType[1]+1)});
+    }
   };
+  // filter bank and coin insert
+  const filterBalance=()=>{
+    let fill = '';
+    if(parseInt(amountType[1000])>0){fill+=`,1000฿ x ${amountType[1000]}`}
+    if(parseInt(amountType[500])>0){fill+=`,500฿ x ${amountType[500]}`}
+    if(parseInt(amountType[100])>0){fill+=`,100฿ x ${amountType[100]}`}
+    if(parseInt(amountType[50])>0){fill+=`,50฿ x ${amountType[50]}`}
+    if(parseInt(amountType[20])>0){fill+=`,20฿ x ${amountType[20]}`}
+    if(parseInt(amountType[10])>0){fill+=`,10฿ x ${amountType[10]}`}
+    if(parseInt(amountType[5])>0){fill+=`,5฿ x ${amountType[5]}`}
+    if(parseInt(amountType[2])>0){fill+=`,2฿ x ${amountType[2]}`}
+    if(parseInt(amountType[1])>0){fill+=`,1฿ x ${amountType[1]}`}
+    fill = fill.slice(1);
+    setFillAmount(fill)
+  }
+  // filter change to bank and coin
+
+  function filterChange(change_temp){
+    
+    let fill = '';
+    let result = change_temp;
+    const type = [1000,500,100,50,20,10,5,2,1];
+    type.map(i=>{
+      if(result>=i){
+        let j = parseInt(result)/parseInt(i);
+        j = parseInt(j);
+        result = parseInt(result)%parseInt(i);
+        fill += `,${i} x ${j}`;
+      }
+    })
+    return fill.slice(1);
+  }
 
   // make confirm for purchase and show end date
   const handleAgreePurchase = () => {
     setAgreePurchase(!agreePurchase);
     setEdate(moment().toDate().toLocaleString());
-    // find different value of start date and end date. 
+    // find different value of start date and end date.
     const start = moment(new Date()); //todays date
     const end = moment(new Date(client.start_date)); // another date
     const duration = start.diff(end, "minute");
     const min = duration;
+    setDuration(min);
     // check size to set state cost
     if (client.locker_size === "s") {
       if (min <= 60) {
@@ -264,12 +326,11 @@ const MemberBoard = () => {
     e.preventDefault();
     let newData = {};
     if (agreePurchase) {
-      if (cost <= client.balance) {
-        const newBalance = client.balance - cost;
+      if (cost <= amount) {
+        window.alert(`${filterChange(parseInt(amount)-parseInt(cost))} : ${parseInt(amount)-parseInt(cost)}฿`);
         newData = {
           _id: client._id,
           no: client.no,
-          balance: +newBalance,
         };
         Purchase(newData);
       } else {
@@ -289,7 +350,8 @@ const MemberBoard = () => {
 
   useEffect(() => {
     readUser();
-  }, [client]);
+    filterBalance();
+  }, [client,amountType]);
 
   return (
     <div>
@@ -298,19 +360,31 @@ const MemberBoard = () => {
           <h2>{client.username}</h2>
         </div>
         <div className="form-group">
-          <div className="form-group">
-            <label>Balance</label>
-            <input
-              type="text"
-              className="form-control"
-              value={`${client.balance}฿`}
-              readOnly
-            />
-          </div>
           <div>
             <div className="row">
+              <div className="col-12">
+                <div className="form-group">
+                  <label>Balance</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={
+                      amount>0?
+                      (`${fillAmount} : ${amount}฿`):(`none : ${amount}฿`)
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row">
               <div className="form-group col-lg-7 col-sm-12">
-                <select className="form-control" onChange={(e)=>{setBalance(e.target.value);}}>
+                <select
+                  className="form-control"
+                  onChange={(e) => {
+                    setBalance(e.target.value);
+                  }}
+                >
                   <option value={1}>฿1</option>
                   <option value={2}>฿2</option>
                   <option value={5}>฿5</option>
@@ -327,14 +401,14 @@ const MemberBoard = () => {
                   className="btn btn-success form-control"
                   onClick={handleDeposit}
                 >
-                  DEPOSIT
+                  INSERT    
                 </button>
               </div>
             </div>
           </div>
           <hr />
           <div className="row">
-            <div className="col-lg-6 col-sm-12">
+            <div className="col-lg-12 col-sm-12">
               <label>LOCKER</label>
               <input
                 type="text"
@@ -344,11 +418,22 @@ const MemberBoard = () => {
               />
             </div>
             <div className="col-lg-6 col-sm-12">
-              <label>COST</label>
+              <label>Cost</label>
               <input
                 type="text"
                 className="form-control"
-                value={`${client.no === 0 ? 0 : cost}฿`}
+                value={
+                  agreePurchase ? `${client.no === 0 ? 0 : cost}฿` : `none`
+                }
+                readOnly
+              />
+            </div>
+            <div className="col-lg-6 col-sm-12">
+              <label>Duration</label>
+              <input
+                type="text"
+                className="form-control"
+                value={agreePurchase ?(`${duration}minute`):(`0 minute`)}
                 readOnly
               />
             </div>

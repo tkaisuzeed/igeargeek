@@ -57,7 +57,6 @@ app.post("/signup", (req, res) => {
               start_date: new Date(0),
               no: 0,
               locker_size:'',
-              balance: 0,
             },
             (err, result) => {
               if (err) throw err;

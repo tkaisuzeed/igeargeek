@@ -9,21 +9,6 @@ const app = express.Router();
 const uri =
   "mongodb://test:admin@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
 
-  // deposit API
-  app.post('/deposit',(req,res)=>{
-      const {_id,balance} = req.body;
-      
-      mongodb.connect(uri,(err,db)=>{
-          if(err)throw err;
-          let data = db.db('workshop');
-          const newValue = { $set: {balance:balance } };
-          data.collection('auth').updateOne({_id:ObjectID(_id)},newValue,(err,result)=>{
-            if(err)throw err;
-            console.log(result)
-            db.close();
-          })
-      })
-  })
   
   // return data of locker API
   app.get('/lockerlist',(req,res)=>{

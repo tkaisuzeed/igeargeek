@@ -1,0 +1,59 @@
+body{
+  background-color: #ee6f57;
+}
+hr{
+  background-color: #f6f5f5;
+}
+.locker{
+  text-align: center;
+  margin: 50px auto auto auto;
+  width: 80%;
+}
+.dashboard{
+  margin: 30px auto 40px auto;
+  padding: 30px;
+  width: 100%;
+  transition: all 200ms;
+}
+.dashboard-head{
+  color: black;
+  border: 0px solid black;
+  margin: 0px auto 10px auto;
+  border-radius: 5px 5px 5px 5px;
+  padding: 5px 25px 5px 25px;
+  width: min-content;
+  background-color:  #f6f5f5;
+}
+.dashboard-name{
+  color: black;
+  border: 0px solid black;
+  margin: 0px auto 10px auto;
+  border-radius: 5px 5px 5px 5px;
+  padding: 5px 25px 5px 25px;
+  width: 100%;
+  background-color:  #f6f5f5;
+}
+.dashboard-body{
+  text-align: center;
+  color: white;
+  border: 0px solid black;
+  border-radius: 5px 5px 5px 5px;
+  padding: 20px;
+  background-color: #145374;
+  transition: all 200ms;
+}
+.dashboard-body:hover{
+  box-shadow: 10px 10px #00334e;
+}
+.Clock{
+  margin-top: 50px;
+  text-align: center;
+  font-size: 70px;
+  font-weight: 100;
+}
+@media  screen and (max-width:500px){
+   .Clock{
+    font-size: 25px;
+   }
+}
+
