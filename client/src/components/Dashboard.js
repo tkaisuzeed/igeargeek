@@ -58,6 +58,7 @@ const SignInBoard = () => {
       setIsValid("form-control is-invalid");
     }
     console.log("LOG:", Cookie.get("user"));
+    window.location.reload = true;
   };
 
   return (
@@ -136,6 +137,7 @@ const SignUpBoard = () => {
         setAuth(true);
         Cookie.set("auth", true);
         Cookie.set("user", res.data.user);
+        window.location.reload = true;
       }
     } else {
       setIsValidPass("form-control is-invalid");
@@ -339,7 +341,7 @@ const MemberBoard = () => {
     } else {
       window.alert(`Pls, Agree or you did not book.`);
     }
-    window.location.reload(false);
+    window.location.reload(true);
   };
 
   // function read user data

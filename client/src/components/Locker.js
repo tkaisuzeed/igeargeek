@@ -55,7 +55,7 @@ const Locker = () => {
         }
         Booking(newData);
       }
-      window.location.reload(false);
+      window.location.reload(true);
     }else{
       window.alert('You were booking yet or Pls,SignIn')
     }
