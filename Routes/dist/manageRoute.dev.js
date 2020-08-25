@@ -17,7 +17,7 @@ var moment = require('moment');
 require('mongodb-moment')(moment);
 
 var app = express.Router();
-var uri = "mongodb://test:admin@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
+var uri = "mongodb://user:1234@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
 app.post('/deposit', function (req, res) {
   var _req$body = req.body,
       _id = _req$body._id,

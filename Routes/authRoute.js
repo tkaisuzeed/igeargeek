@@ -3,10 +3,11 @@ const express = require("express");
 const promise = require("promise");
 const { isNull } = require("util");
 const { ObjectID } = require("mongodb");
+const { resolve } = require("promise");
 
 const app = express.Router();
 const uri =
-  "mongodb://test:admin@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
+  "mongodb://user:1234@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
 
   // Sign In API
 app.post("/signin", (req, res) => {
@@ -56,10 +57,14 @@ app.post("/signup", (req, res) => {
               password: password,
               start_date: new Date(0),
               no: 0,
-              locker_size:'',
+              locker_size:''
             },
             (err, result) => {
               if (err) throw err;
+              res.json({
+                auth: true,
+                user: result.insertedId
+              });
             }
           );
         } else {
@@ -68,16 +73,6 @@ app.post("/signup", (req, res) => {
           });
         }
       })
-      .then(() => {
-        data.collection("auth").findOne({ username: username }, (err, resp) => {
-          if (err) reject(err);
-          res.json({
-            auth: true,
-            user: resp._id,
-          });
-        });
-        db.close();
-      });
   });
 });
 

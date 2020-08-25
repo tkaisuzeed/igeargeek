@@ -7,7 +7,7 @@ const moment = require('moment');
 require('mongodb-moment')(moment);
 const app = express.Router();
 const uri =
-  "mongodb://test:admin@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
+  "mongodb://user:1234@clustertest-shard-00-00.jipjc.mongodb.net:27017,clustertest-shard-00-01.jipjc.mongodb.net:27017,clustertest-shard-00-02.jipjc.mongodb.net:27017/workshop?ssl=true&replicaSet=atlas-14m7p7-shard-0&authSource=admin&retryWrites=true&w=majority";
 
   
   // return data of locker API
@@ -59,7 +59,7 @@ const uri =
         console.log(result);
       })
       // update data to user(locker number,start date, locker size and balance)
-      const newUserValue = {$set:{no:0,start_date:0,locker_size:'',balance:balance}};
+      const newUserValue = {$set:{no:0,start_date:0,locker_size:''}};
       data.collection('auth').updateOne({_id:ObjectID(_id)},newUserValue,(err,result)=>{
         console.log(result);
       })

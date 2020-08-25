@@ -325,7 +325,7 @@ const MemberBoard = () => {
   const handlePurchase = (e) => {
     e.preventDefault();
     let newData = {};
-    if (agreePurchase) {
+    if (agreePurchase&&client.no!==0) {
       if (cost <= amount) {
         window.alert(`${filterChange(parseInt(amount)-parseInt(cost))} : ${parseInt(amount)-parseInt(cost)}฿`);
         newData = {
@@ -337,7 +337,7 @@ const MemberBoard = () => {
         window.alert(`Don't have enough money`);
       }
     } else {
-      window.alert(`Pls, Agree`);
+      window.alert(`Pls, Agree or you did not book.`);
     }
     window.location.reload(false);
   };
